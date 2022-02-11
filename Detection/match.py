@@ -61,7 +61,7 @@ paire=[]
 
 
 for i in range (len(x1)):
-    if (np.min(paireZMSDD[i])<100000):
+    if (np.min(paireZMSDD[i])<150000):
         paire1=i
         paire2=np.where(paireZMSDD[i]==np.min(paireZMSDD[i]))[0][0]
         paire.append((paire1,paire2))
