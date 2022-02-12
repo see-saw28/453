@@ -12,15 +12,18 @@ import scipy.signal as sg
 import cv2
 
 import harris
+import fast1
 
 img1 = Image.open("set1-1.png")
 img1 = np.array(ImageOps.grayscale(img1))
 img2 = Image.open("set1-2.png")
 img2 = np.array(ImageOps.grayscale(img2))
 
-R1,x1,y1=harris.harris(img1,seuil=0.2,taille_fenetre=3,sigma=2)
+# R1,x1,y1=harris.harris(img1,seuil=0.2,taille_fenetre=3,sigma=2)
+# R2,x2,y2=harris.harris(img2,seuil=0.2,taille_fenetre=3,sigma=2)
 
-R2,x2,y2=harris.harris(img2,seuil=0.2,taille_fenetre=3,sigma=2)
+x1,y1=fast1.fast(img1,t=100)
+x2,y2=fast1.fast(img2,t=100)
 
 
 fig, (ax1, ax2) = plt.subplots(1, 2)
@@ -61,7 +64,7 @@ paire=[]
 
 
 for i in range (len(x1)):
-    if (np.min(paireZMSDD[i])<150000):
+    if (np.min(paireZMSDD[i])<100000):
         paire1=i
         paire2=np.where(paireZMSDD[i]==np.min(paireZMSDD[i]))[0][0]
         paire.append((paire1,paire2))

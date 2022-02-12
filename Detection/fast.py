@@ -13,8 +13,18 @@ import cv2
 
 
 
-img = Image.open("synthetic.gif")
-I = np.array(img)
+# img = Image.open("synthetic.gif")
+# I = np.array(img)
+
+img = Image.open("set1-1.png")
+img = np.array(ImageOps.grayscale(img))
+I = img
+
+# img = Image.open("set1-2.png")
+# img = np.array(ImageOps.grayscale(img2))
+# I = img
+
+
 
 h,l = I.shape
 t=20
