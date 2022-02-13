@@ -15,7 +15,6 @@ import cv2
 
 def harris(img,seuil=0.6,taille_fenetre=4,sigma = 3):
     #Filtrage de Sobel
-
     Hx=np.array([[-1,0,1],[-2,0,2],[-1,0,1]])
     Hy=np.array([[-1,-2,-1],[0,0,0],[1,2,1]])
 
@@ -25,12 +24,9 @@ def harris(img,seuil=0.6,taille_fenetre=4,sigma = 3):
     G=np.sqrt(np.square(Gx)+np.square(Gy))
     
     
-    
+    #Calcul de la matrice R
     h,l=Gx.shape
-    img_R=np.zeros(Gx.shape)
-    
-    
-    
+    R_raw=np.zeros(Gx.shape)
     alpha=0.05
     
     def w(x,y):
@@ -45,17 +41,15 @@ def harris(img,seuil=0.6,taille_fenetre=4,sigma = 3):
                         M+=w(x,y)*np.array([[Gx[i+x,j+y]**2,Gx[i+x,j+y]*Gy[i+x,j+y]],[Gx[i+x,j+y]*Gy[i+x,j+y],Gy[i+x,j+y]**2]])
                         
             
-            R=np.linalg.det(M)-alpha*np.trace(M)**2
-            img_R[i,j]=R
+            r=np.linalg.det(M)-alpha*np.trace(M)**2
+            R_raw[i,j]=r
             
             
     
-    R_raw=img_R/np.max(img_R)
-           
-    
-    
+    R_raw=R_raw/np.max(R_raw)
     R=(R_raw>seuil)*R_raw 
     
+    #Recherche des maximus locaux
     R_max=np.zeros(R.shape)
                         
     largeur = 2
@@ -65,6 +59,7 @@ def harris(img,seuil=0.6,taille_fenetre=4,sigma = 3):
             if valeur==np.max(R[i-largeur:i+largeur+1,j-largeur:j+largeur+1]):
                 R_max[i,j]=valeur
     
+    #Coordonnées des coins
     x,y=np.where(R_max>seuil)
     
     return (R_raw,x,y)

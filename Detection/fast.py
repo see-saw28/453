@@ -13,12 +13,12 @@ import cv2
 
 
 
-# img = Image.open("synthetic.gif")
-# I = np.array(img)
+img = Image.open("synthetic.gif")
+I = np.array(img)
 
-img = Image.open("set1-1.png")
-img = np.array(ImageOps.grayscale(img))
-I = img
+# img = Image.open("set1-1.png")
+# img = np.array(ImageOps.grayscale(img))
+# I = img
 
 # img = Image.open("set1-2.png")
 # img = np.array(ImageOps.grayscale(img2))
@@ -40,8 +40,7 @@ for i in range(3,h-3):
         fast=np.zeros((16,1))
         last=''
         FAST2=np.concatenate((FAST,FAST))
-        for k in range(len(FAST2)):
-            
+        for k in range(len(FAST2)): 
             if (FAST2[k]<Ic-t):
                 d+=1
                 if (last!='d'):

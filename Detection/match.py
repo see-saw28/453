@@ -57,17 +57,32 @@ for i in range (len(x1)):
                     ZMSDD+=(img1[x1[i]+x,y1[i]+y]-mean1-(img2[x2[j]+x,y2[j]+y]-mean2))**2
                     
             paireZMSDD[i,j]=ZMSDD
+        
+        else :
+            paireZMSDD[i,j]=np.inf
             
 
-paire=[]
-
-
+paire12=[]
 
 for i in range (len(x1)):
     if (np.min(paireZMSDD[i])<100000):
         paire1=i
         paire2=np.where(paireZMSDD[i]==np.min(paireZMSDD[i]))[0][0]
-        paire.append((paire1,paire2))
-        ax3.plot([y1[paire1],y2[paire2]+img1.shape[1]],[x1[paire1],x2[paire2]])
+        paire12.append((paire1,paire2))
+        #ax3.plot([y1[paire1],y2[paire2]+img1.shape[1]],[x1[paire1],x2[paire2]])
+  
+paire21=[]
         
+for i in range (len(x2)):
+    if (np.min(paireZMSDD[:,i])<100000):
+        paire2=i
+        paire1=np.where(paireZMSDD[:,i]==np.min(paireZMSDD[:,i]))[0][0]
+        paire21.append((paire1,paire2))  
         
+married_match=list(set(paire12) & set(paire21))
+for i in range(len(married_match)):
+    ax3.plot([y1[married_match[i][0]],y2[married_match[i][1]]+img1.shape[1]],[x1[married_match[i][0]],x2[married_match[i][1]]])
+
+
+
+    

@@ -84,15 +84,15 @@ def fast(I,t=80):
 
 
 if __name__ == "__main__":
-    # img = Image.open("synthetic.gif")
-    # iimg = np.array(img)
+    img = Image.open("synthetic.gif")
+    img = np.array(img)
     
-    # img = Image.open("set1-1.png")
-    # img = np.array(ImageOps.grayscale(img))
-    
-    
-    img = Image.open("set1-2.png")
+    img = Image.open("set1-1.png")
     img = np.array(ImageOps.grayscale(img))
+    
+    
+    # img = Image.open("set1-2.png")
+    # img = np.array(ImageOps.grayscale(img))
     
     
     x,y = fast(img,t=80)
