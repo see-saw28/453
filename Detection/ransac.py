@@ -6,8 +6,9 @@ Created on Tue Feb 15 09:07:02 2022
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL import *
+from PIL import Image,ImageOps
 import scipy.signal as sg
+import scipy.interpolate as si
 import cv2
 import random
 
@@ -67,7 +68,7 @@ for j in range(100):
         
         norme=np.linalg.norm(Hx-x_prime)
         
-        if norme<3:
+        if norme<2:
             n+=1
             Cj.append(C[i])
             
@@ -91,11 +92,24 @@ for j in range(100):
 
 # H=np.dot(v,y)
 
+#%%
+
 h1,l1=img1.shape
 h2,l2=img2.shape
 
-img_full=np.concatenate((np.zeros(img1.shape),img2),axis=1)
+img_full=np.concatenate((np.zeros(img1.shape)-1,img2),axis=1)
 
+taille=2
+
+#difference d'intensité img1 et img2
+deltaI=0
+for i in range(Nmax):
+    (x1,y1),(x2,y2)=Cmax[i]
+    deltaI+=np.mean(img2[x2-taille:x2+taille+1,y2-taille:y2+taille+1])-np.mean(img1[x1-taille:x1+taille+1,y1-taille:y1+taille+1])
+    
+deltaI=deltaI/Nmax
+
+#calcul des positions dans l'image 2 des points de l'image 1
 for i in range(h1):
     for j in range(l1):
         x=np.array([i,j,1])
@@ -103,10 +117,44 @@ for i in range(h1):
         Hx=Hx/Hx[2]
         
         X,Y,Z=Hx
+        X=int(X)
+        Y=int(Y)
         if((X>=0)&(X<h1)):
-            img_full[int(X),int(Y)+l1]=img1[i,j]
+            delta=0
+            if ((X>0)&(X<h1)&(Y>=0)&(Y<l1)):
+                delta=np.mean(img2[X-taille:X+taille+1,Y-taille:Y+taille+1])-np.mean(img1[i-taille:i+taille+1,j-taille:j+taille+1])
+                
+            if (Y<0):
+                delta=deltaI
+            img_full[X,Y+l1]=img1[i,j]+delta
             
-plt.imshow(img_full,cmap='gray')
+        
+            
+fig, ax = plt.subplots(1, 1)
+ax.imshow(img_full,cmap='gray')
+
+
+
+array=img_full
+array[array==-1] = np.nan
+
+x = np.arange(0, array.shape[1])
+y = np.arange(0, array.shape[0])
+#mask invalid values
+array = np.ma.masked_invalid(array)
+xx, yy = np.meshgrid(x, y)
+#get only the valid values
+x1 = xx[~array.mask]
+y1 = yy[~array.mask]
+newarr = array[~array.mask]
+
+GD1 = si.griddata((x1, y1), newarr.ravel(),
+                          (xx, yy),
+                             method='cubic')
+
+fig2, ax2 = plt.subplots(1, 1)
+ax2.imshow(GD1,cmap='gray')
+
         
 
         

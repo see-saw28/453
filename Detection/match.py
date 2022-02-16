@@ -93,6 +93,6 @@ if __name__ == "__main__":
     img2 = Image.open("set1-2.png")
     img2 = np.array(ImageOps.grayscale(img2))
     
-    x1,y1,x2,y2,couple = match(img1,img2,'fast')
+    x1,y1,x2,y2,couple = matching(img1,img2,'fast')
     
     
