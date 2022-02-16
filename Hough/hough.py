@@ -7,16 +7,19 @@ Created on Wed Feb  9 19:30:27 2022
 
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL import *
+from PIL import Image,ImageOps
 import scipy.signal as sg
 import cv2
+import time
 
+# img = Image.open("four.png")
+# img = np.array(img)
 
-img = Image.open("four.png")
-img = np.array(img)
+img = Image.open("coins2.jpg")
+img = np.array(ImageOps.grayscale(img))
 
 #Filtrage de Sobel
-
+start =time.time()
 Hx=np.array([[-1,0,1],[-2,0,2],[-1,0,1]])
 Hy=np.array([[-1,-2,-1],[0,0,0],[1,2,1]])
 
@@ -37,7 +40,7 @@ G_seuil = (G>seuil)*G
 # plt.show()
 
 #Methode avec l'accumulateur
-acc=np.zeros((100,100,139))
+acc=np.zeros((600,600,900))
 
 r,c = G.shape
 
@@ -52,7 +55,7 @@ for i in range(r):
                             acc[x,y,rad-3]+=139/rad #division par le rayon pour normaliser car le nombre de point est prop au rayon
 
 #Maximum locaux
-acc1=np.zeros((100,100,139)) 
+acc1=np.zeros((600,600,900)) 
 
 larg=2 #on cherche le maximum dans un cube de largeur 2*larg+1                 
 for i in range(larg,r-larg):
@@ -77,6 +80,8 @@ for i in range(N):
     cv2.circle(img3, center = (c[0]+1,r[0]+1), radius =rad[0]+3, color =(255,0,0), thickness=1)
     acc1[r,c,rad]=0
     plt.plot(c[0]+1,r[0]+1,'+r')
-    
+ 
+print(time.time()-start)
     
 plt.imshow(img3)
+

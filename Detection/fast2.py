@@ -62,6 +62,7 @@ def fast(I,N=9,t=80):
                     b=0
                     
                 if ((b>=N)|(d>=N)):
+                    # V[i,j]=max(abs(FAST-Ic)-t)
                     V[i,j]=sum(abs(FAST-Ic))
                     break
                 
@@ -78,7 +79,7 @@ def fast(I,N=9,t=80):
                 FAST_max[i,j]=valeur
                 V[i,j]=valeur+1
                    
-    x,y=np.where(FAST_max>100)
+    x,y=np.where(FAST_max>0)
 
     return (x,y,V)      
 
