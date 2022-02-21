@@ -31,7 +31,7 @@ for i in range(len(couples)):
 Nmax=0
 Hmax=[]
 Cmax=[]
-for j in range(100):
+for j in range(1000):
 
     c= random.sample(couples, k=4)
     
@@ -109,6 +109,7 @@ for i in range(Nmax):
     
 deltaI=deltaI/Nmax
 
+
 #calcul des positions dans l'image 2 des points de l'image 1
 for i in range(h1):
     for j in range(l1):
@@ -119,12 +120,12 @@ for i in range(h1):
         X,Y,Z=Hx
         X=int(X)
         Y=int(Y)
-        if((X>=0)&(X<h1)):
+        if((X>=0)&(X<h1)&(Y<l1)&(Y+l1>0)):
             delta=0
-            if ((X>0)&(X<h1)&(Y>=0)&(Y<l1)):
+            if (Y>=0):
                 delta=np.mean(img2[X-taille:X+taille+1,Y-taille:Y+taille+1])-np.mean(img1[i-taille:i+taille+1,j-taille:j+taille+1])
                 
-            if (Y<0):
+            else:
                 delta=deltaI
             img_full[X,Y+l1]=img1[i,j]+delta
             
